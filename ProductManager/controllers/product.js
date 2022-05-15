@@ -26,6 +26,7 @@ exports.createProduct = async (req, res) => {
 }
 
 exports.getAllProducts = async (req, res) => {
+    console.log('Hitting Request');
     Product.find().then(products => {
         res.send({products});
     }).catch(err => {
@@ -35,7 +36,9 @@ exports.getAllProducts = async (req, res) => {
 }
 
 exports.getProductById = async (req, res) => {
-
+    const { id } = req.params;
+    const product = await Product.findOne({_id : id});
+    return res.send({product});
 }
 
 exports.updateProduct = async (req, res) => {
