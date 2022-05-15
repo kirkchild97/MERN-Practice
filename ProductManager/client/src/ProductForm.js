@@ -1,18 +1,50 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import axios from 'axios';
 
-const ProductForm = () => {
+const ProductForm = ({edit}) => {
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState('');
     const [canSubmit, setCanSubmit] = useState(false);
 
+    const {id} = useParams();
+
+    useEffect(() => {
+        console.log('Hitting Edit Page');
+        if(edit){
+            axios.get(`http://localhost:8080/products/${id}`)
+            .then(res => {
+                console.log('hitting finish');
+                const {product} = res.data;
+                setTitle(product.title);
+                setPrice(product.price);
+                setDescription(product.description);
+                validateInputs();
+            })
+        }
+    }, [])
+
     const submitProduct = async (e) => {
         e.preventDefault();
         if(canSubmit){
             console.log('Submitting baby!');
-            await axios.post('http://localhost:8080/product/new', {title, price, description})
-                .then(res => console.log(res));
+            if(edit){
+                await axios.post(`http://localhost:8080/product/edit/${id}`, {title, price, description})
+                    .then(res => {
+                        if(res.data.success){
+                            navigate('/', {replace : true});
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
+            else{
+                await axios.post('http://localhost:8080/product/new', {title, price, description})
+                    .then(res => {
+                        navigate('/');
+                    });
+            }
         }
     }
 

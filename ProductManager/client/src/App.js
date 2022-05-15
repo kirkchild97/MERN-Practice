@@ -1,6 +1,7 @@
 import ProductForm from "./ProductForm";
 import ProductList from "./ProductList";
 import ProductDetails from "./ProductDetails";
+import EditProduct from "./EditProduct";
 import Navbar from "./Navbar";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ProductList/>}/>
           <Route path="/new" element={<ProductForm/>}/>
+          <Route path="/product/edit/:id" element={<EditProduct />}/>
           <Route path="/:id" element={<ProductDetails/>}/>
         </Routes>
       </BrowserRouter>

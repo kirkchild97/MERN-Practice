@@ -42,11 +42,41 @@ exports.getProductById = async (req, res) => {
 }
 
 exports.updateProduct = async (req, res) => {
+    console.log('hitting');
+    try{
+        const {id} = req.params;
+        const {
+            title,
+            price,
+            description
+        } = req.body;
 
+        validateProduct({title, price, description});
+        Product.findOneAndUpdate({_id:id},{
+            title,
+            price,
+            description
+        }).then(result => {
+            return res.send({success : true});
+        })
+    }
+    catch(err){
+        return res.send({success : false});
+    }
 }
 
-exports.deleteProduct = async (req, res) => {
-
+exports.deleteProductById = async (req, res) => {
+    const {id} = req.params;
+    console.log('Hitting Delete');
+    console.log(id);
+    await Product.findOneAndDelete({ _id : id })
+        .then(result => {
+            return res.send({success : true});
+        }).catch(err => {
+            console.log('Error');
+            console.log(err);
+            return res.send({success : false});
+        });
 }
 
 const validateProduct = ({title, price, description}) => {
