@@ -10,5 +10,17 @@ class Ninja{
 
     showStats(){ console.log(`Name: ${this.name}, Health: ${this.health}, Speed:${this.speed}, Strength:${this.strength}`); }
 
-    drinkShake(){ this.health += 10; }
+    drinkSake(){ this.health += 10; }
+}
+
+class Sensei extends Ninja{
+    constructor({name, health=200}){
+        super({name, health});
+        this.wisdom = 10;
+    }
+
+    speakWisdom(){
+        console.log('I am wise because I realize that I know nothing.');
+        super.drinkSake();
+    }
 }
